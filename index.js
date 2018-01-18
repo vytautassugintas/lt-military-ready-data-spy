@@ -6,9 +6,12 @@ const url =
 
 let result = [];
 
-console.log("Starting data collection from " + url);
+let rule = new schedule.RecurrenceRule();
+rule.second = 5;
+
+console.log("\x1b[32m", "✅ ", "Starting data collection from " + url);
 const job = schedule
-  .scheduleJob("*/1 * * * *", () => {
+  .scheduleJob(rule, () => {
     osmosis
       .get(url)
       .find("table tr td strong")
@@ -19,6 +22,7 @@ const job = schedule
 
     setTimeout(() => {
       const data = {
+        timeLogged: new Date().getTime(),
         statedWishForDuty: result[15],
         statedWishForDutyProcedures: result[16],
         pledgedPriorityForDuty: result[17],
@@ -29,6 +33,7 @@ const job = schedule
           parseInt(result[18]) +
           parseInt(result[19])
       };
-      console.log(data);
+      console.log("\x1b[37m", "\x1b[4m", "Data from: " + new Date());
+      console.log("\x1b[37m", "\x1b[0m", data);
     }, 10000);
   }); 
