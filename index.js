@@ -1,6 +1,10 @@
 const osmosis = require("osmosis");
 const schedule = require("node-schedule");
 
+const express = require('express')
+const app = express()
+const port = process.env.PORT || 8080;
+
 const url =
   "https://kam.lt/lt/aktuali_informacija_apie_privalomaja_karine_tarnyba/new_2716.html";
 
@@ -12,6 +16,7 @@ rule.second = 5;
 console.log("\x1b[32m", "✅ ", "Starting data collection from " + url);
 const job = schedule
   .scheduleJob(rule, () => {
+    result = [];
     osmosis
       .get(url)
       .find("table tr td strong")
@@ -37,3 +42,7 @@ const job = schedule
       console.log("\x1b[37m", "\x1b[0m", data);
     }, 10000);
   }); 
+
+app.get('/', (req, res) => res.send(result))
+
+app.listen(port, () => console.log('Listening on port ' + port))
