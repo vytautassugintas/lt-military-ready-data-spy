@@ -3,7 +3,7 @@ const schedule = require("node-schedule");
 
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8123;
 
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
@@ -71,4 +71,4 @@ mongoose.connect(
 
 app.get("/", (req, res) => res.send(result));
 
-app.listen(port, () => console.log("Listening on port " + port));
+app.listen(port, () => console.log("\x1b[32m", "✅ ", "Listening on port " + port));
