@@ -8,7 +8,7 @@ const port = process.env.PORT || 8123;
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-let schemaToSave = mongoose.model("Warrios", {
+let Warrior = mongoose.model("Warrios", {
   timeLogged: String,
   statedWishForDuty: String,
   statedWishForDutyProcedures: String,
@@ -38,7 +38,7 @@ const job = schedule.scheduleJob(rule, () => {
     });
 
   setTimeout(() => {
-    const data = new schemaToSave({
+    const data = new Warrior({
       timeLogged: new Date().getTime(),
       statedWishForDuty: result[15],
       statedWishForDutyProcedures: result[16],
@@ -71,4 +71,14 @@ mongoose.connect(
 
 app.get("/", (req, res) => res.send(result));
 
-app.listen(port, () => console.log("\x1b[32m", "✅ ", "Listening on port " + port));
+app.get("/all", (req, res) => {
+  Warrior.find((err, warriors) => {
+    if (err) console.log("error while fetching all warriors");
+    res.send(warriors);
+    // return warriors;
+  });
+});
+
+app.listen(port, () =>
+  console.log("\x1b[32m", "✅ ", "Listening on port " + port)
+);
